@@ -22,6 +22,18 @@ const app = new Vue({
             map: null,
         },
         time_currentTime: "19.04.2024",
+        g_theme: 'default', //default (белый фон, черный текст), dark (черный фон, белый текст),
+        g_theme_data:{
+            'default':{
+                background_color: 'white',
+                color: 'black'
+            },
+            'dark':{
+                background_color: 'black',
+                color: 'white'
+            }
+        },
+        input_searchPub:''
     },
     methods: {
         yamap_init() {
@@ -44,7 +56,7 @@ const app = new Vue({
                     balloonContent: 'Dimitrij kurac is here today!',
                     iconUrl: 'img/beer.png', // URL к кастомной иконке
                 },
-                // Добавьте больше меток, если необходимо
+                // Брать метки из базы
             ];
 
             // Добавьте кастомные метки на карту
@@ -67,7 +79,33 @@ const app = new Vue({
                 // Добавьте метку на карту
                 this.map.geoObjects.add(placemark);
                 })
+        },
+        changeTheme(){
+            (this.g_theme == 'default') ? this.g_theme = 'dark' : this.g_theme = 'default'
+
+            document.body.style.backgroundColor = this.g_theme_data[this.g_theme].background_color
+            document.body.style.color = this.g_theme_data[this.g_theme].color
+        },
+        input_searchPub_onChange(o, n){
+            console.log('input_searchPub_onChange')
+            console.log(o)
+            console.log(n)
+            console.log('==========')
+            if(n.length == 0){
+                this.map.setCenter([44.815303, 20.457835])
             }
+            else if(n.length == 1){
+                this.map.panTo([44.815303, 15.457835])
+            }
+            else if(n.length == 2){
+                
+            }
+        }
+    },
+    watch:{
+        input_searchPub(n, o){
+            this.input_searchPub_onChange(o, n)
+        }
     },
     mounted() {
         this.time_currentTime = new Date().toLocaleDateString();

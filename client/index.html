@@ -8,13 +8,20 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body>
+<body >
     <div class="container" id="app">
+        <button @click="changeTheme">theme</button>
         {{ time_currentTime }}
+        <div class="test">
+            <p>{{ g_theme }}</p>
+            <p>{{input_searchPub}}</p>
+            <p>{{input_searchPub.length}}</p>
+            <p>{{g_theme_data[g_theme].color}}</p>
+        </div>
         <div class="header"></div>
-        <input type="text" class="pub-name-input" placeholder="Enter Pub's name">
+        <input type="search" class="pub-name-input" placeholder="Enter Pub's name" v-model="input_searchPub">
         <div id="map" class="map"></div>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magnam numquam quis sequi consectetur voluptatum commodi iure repellendus magni cum, fugiat ratione nesciunt, quia qui necessitatibus. Tenetur veritatis laudantium rem suscipit, ipsam magnam aliquid, architecto ipsa veniam, nobis a laboriosam animi sequi hic recusandae vel consequuntur.
+        <p class="mybb">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magnam numquam quis sequi consectetur voluptatum commodi iure repellendus magni cum, fugiat ratione nesciunt, quia qui necessitatibus. Tenetur veritatis laudantium rem suscipit, ipsam magnam aliquid, architecto ipsa veniam, nobis a laboriosam animi sequi hic recusandae vel consequuntur.
         </p>
         <button class="btn btn-danger btn-lg rounded-circle" style="">FIND ME</button>
     </div>
