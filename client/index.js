@@ -33,7 +33,10 @@ const app = new Vue({
                 color: 'white'
             }
         },
-        input_searchPub:''
+        input_searchPub:'',
+        showModalSearch:false,//Показывать окно поиска 
+        // input_searchPub_WidthPx: 0//залупа (номер 1)
+        db_data_pubs:null,//массив из БД пабов
     },
     methods: {
         yamap_init() {
@@ -92,14 +95,65 @@ const app = new Vue({
             console.log(n)
             console.log('==========')
             if(n.length == 0){
-                this.map.setCenter([44.815303, 20.457835])
+                // this.map.setCenter([44.815303, 20.457835])
+                this.showModalSearch=false
             }
             else if(n.length == 1){
-                this.map.panTo([44.815303, 15.457835])
+                this.showModalSearch=true
+                // this.map.panTo([44.815303, 15.457835])
             }
             else if(n.length == 2){
-                
+                this.showModalSearch=true
             }
+        },
+        db_getPubs(){
+            this.showModalSearch=!this.showModalSearch
+            axios.get('http://localhost:8080/api/getPubs', {
+                params: {
+                    country: 'serbia',
+                    city: 'belgrade',
+                    date: new Date().toISOString(),
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+                }
+            })
+            .then(response => {
+                console.log(response.data)
+                this.db_data_pubs = response.data
+                // Добавление свойства `clicked` ко всем объектам в массиве `db_data_pubs`
+                this.db_data_pubs.forEach(pub => {
+                    // Используйте `Vue.set()` для добавления свойства `clicked` к объекту `pub`
+                    this.$set(pub, 'clicked', false);
+                    this.$set(pub, 'distance', 1.5)
+                });
+
+            })
+            .catch(error => console.log(error))
+        },
+        // getInputPubsWidthInPixels(){//залупа (номер 1) ебаная не работает
+        //     // Получаем элемент block1
+        //     const input_searchPubElement = this.$refs.pub_name_input;
+            
+        //     // Получаем вычисленный стиль элемента block1
+        //     const computedStyle = window.getComputedStyle(input_searchPubElement);
+            
+        //     // Получаем ширину элемента block1 в пикселях
+        //     this.input_searchPub_WidthPx = parseFloat(computedStyle.width);
+            
+        //     // Устанавливаем переменную CSS для ширины блока1 в пикселях
+        //     document.documentElement.style.setProperty('--pub_name_input-px', `${this.input_searchPub_WidthPx}px`);
+        //     console.log(this.input_searchPub_WidthPx)
+        // },
+        getTodayHours(pub) {//перепроверить, не уверен, что работает корректно, добавить часовой пояс
+            // Функция для получения часов работы в текущий день
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            const today = new Date().getDay() - 1; // Получаем индекс текущего дня недели (0 - воскресенье, 6 - суббота)
+            const dayName = days[today]; // Имя текущего дня недели
+            return pub[dayName + '_hours']; // Возвращаем часы работы в текущий день
+        },
+        handleClick(pub){
+            pub.clicked = !pub.clicked;
+            console.log(pub)
+            console.log(this.db_data_pubs)
         }
     },
     watch:{
@@ -110,22 +164,6 @@ const app = new Vue({
     mounted() {
         this.time_currentTime = new Date().toLocaleDateString();
         ymaps.ready(this.yamap_init);
+        // this.getInputPubsWidthInPixels();//залупа (номер 1)
     }
 });
-
-
-// function init() {
-//     var myMap = new ymaps.Map('map', {
-//         center: [55.76, 37.64],
-//         zoom: 10
-//     });
-    
-//     // Создание метки
-//     var myPlacemark = new ymaps.Placemark([55.76, 37.64], {
-//         hintContent: 'Моя метка',
-//         balloonContent: 'Информация о метке'
-//     });
-    
-//     // Добавление метки на карту
-//     myMap.geoObjects.add(myPlacemark);
-// }

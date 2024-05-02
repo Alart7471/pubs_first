@@ -1,0 +1,37 @@
+/* Стили для блока pub-block */
+.closed-pub-block {
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    height: 46px; /* Установите высоту блока */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.closed-pub-info {
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+}
+
+.closed-pub-name,
+.closed-pub-address,
+.closed-pub-hours,
+.closed-pub-distance {
+    font-size: 12px;
+}
+
+.closed-pub-name {
+    font-weight: bold;
+}
+
+.closed-pub-hours,
+.closed-pub-distance {
+    font-weight: bold;
+    font-size: 11px;
+    color: #555;
+}

@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Website</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+    <link rel="stylesheet" type="text/css" href="style/pub_search.css">
+    <link rel="stylesheet" type="text/css" href="style/pub_search_clicked.css">
 </head>
 <body >
     <div class="container" id="app">
@@ -19,14 +21,55 @@
             <p>{{g_theme_data[g_theme].color}}</p>
         </div>
         <div class="header"></div>
-        <input type="search" class="pub-name-input" placeholder="Enter Pub's name" v-model="input_searchPub">
+        <input type="search" class="pub_name_input" placeholder="Enter Pub's name" v-model="input_searchPub">
+        <div v-if="showModalSearch" class="modal_search">
+            <!-- Содержание модального окна -->
+            <p>Результаты поиска</p>
+            <!-- Другие элементы контента -->
+            <!-- <div v-for="pub in db_data_pubs" :key="pub.id" class="pub-block" @click="handleClick(pub)">
+                <h3>{{ pub.name }}</h3>
+                <p><strong>Location:</strong> {{ pub.address }}</p>
+                <p><strong>Coordinates:</strong> {{ pub.location_lat }}, {{ pub.location_lng }}</p>
+                <p><strong>Hours:</strong> Mon: {{ pub.monday_hours }}, Tue: {{ pub.tuesday_hours }}, Wed: {{ pub.wednesday_hours }}, Thu: {{ pub.thursday_hours }}, Fri: {{ pub.friday_hours }}, Sat: {{ pub.saturday_hours }}, Sun: {{ pub.sunday_hours }}</p>
+                <p><strong>Price Range:</strong> {{ pub.price_range }}</p>
+            </div> -->
+            <div v-for="pub in db_data_pubs" :key="pub.id" @click="handleClick(pub)">
+                <div v-if="pub.clicked"  class="opened-pub-block">
+                    <!-- <div class="opened-pub-info">
+                        <span class="opened-pub-name">{{ pub.name }}</span> - 
+                        <span class="opened-pub-address">{{ pub.address }}</span>
+                    </div>
+                    <div class="opened-pub-details">
+                        <span class="opened-pub-hours">{{ getTodayHours(pub) }}</span> | 
+                        <span class="opened-pub-distance">{{ pub.distance }} km</span>
+                    </div> -->
+                    <h3>{{ pub.name }}</h3>
+                    <p><strong>Location:</strong> {{ pub.address }}</p>
+                    <p><strong>Coordinates:</strong> {{ pub.location_lat }}, {{ pub.location_lng }}</p>
+                    <p><strong>Hours:</strong> Mon: {{ pub.monday_hours }}, Tue: {{ pub.tuesday_hours }}, Wed: {{ pub.wednesday_hours }}, Thu: {{ pub.thursday_hours }}, Fri: {{ pub.friday_hours }}, Sat: {{ pub.saturday_hours }}, Sun: {{ pub.sunday_hours }}</p>
+                    <p><strong>Price Range:</strong> {{ pub.price_range }}</p>
+                </div>
+                <div v-else  class="closed-pub-block">
+                    <div class="closed-pub-info">
+                        <span class="closed-pub-name">{{ pub.name }}</span> - 
+                        <span class="closed-pub-address">{{ pub.address }}</span>
+                    </div>
+                    <div class="closed-pub-details">
+                        <span class="closed-pub-hours">{{ getTodayHours(pub) }}</span> | 
+                        <span class="closed-pub-distance">{{ pub.distance }} km</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="map" class="map"></div>
         <p class="mybb">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magnam numquam quis sequi consectetur voluptatum commodi iure repellendus magni cum, fugiat ratione nesciunt, quia qui necessitatibus. Tenetur veritatis laudantium rem suscipit, ipsam magnam aliquid, architecto ipsa veniam, nobis a laboriosam animi sequi hic recusandae vel consequuntur.
         </p>
-        <button class="btn btn-danger btn-lg rounded-circle" style="">FIND ME</button>
+        <button class="btn btn-danger btn-lg rounded-circle" @click="db_getPubs">FIND ME</button>
     </div>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=b94de822-2b88-4368-a560-f5d616e15835&lang=en_US" type="text/javascript"></script>
 
     <script type="module" src="index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>
 </html>
